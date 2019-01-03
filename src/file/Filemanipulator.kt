@@ -8,8 +8,6 @@ object Filemanipulator {
 
     fun perform(args: Array<String>): Boolean {
 
-        SkyscaperApp.logger.log(message = "--- Performing copy and delete start---")
-
         SkyscaperApp.logger.log(message = "Checking files ...")
 
         val originFile = File(args[0])
@@ -43,8 +41,6 @@ object Filemanipulator {
         copiedFiles.forEach { it.delete() }
 
         SkyscaperApp.logger.log(message = "Clean up: source files deleted.")
-
-        SkyscaperApp.logger.log(message = "--- Performing copy and delete completed ---")
 
         return true
     }
