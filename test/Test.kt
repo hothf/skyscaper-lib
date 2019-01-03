@@ -28,7 +28,7 @@ class Test {
     }
 
     @Test
-    fun `test the file manipulation functionality`() {
+    fun `test the file manipulation functionality`() = runBlocking {
 
         val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
 

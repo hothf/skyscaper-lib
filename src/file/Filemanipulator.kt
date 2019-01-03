@@ -1,12 +1,13 @@
 package file
 
 import app.SkyscaperApp
+import kotlinx.coroutines.yield
 import logger.Severity
 import java.io.File
 
 object Filemanipulator {
 
-    fun perform(args: Array<String>): Boolean {
+    suspend fun perform(args: Array<String>): Boolean {
 
         SkyscaperApp.logger.log(message = "Checking files ...")
 
@@ -22,6 +23,8 @@ object Filemanipulator {
         val copiedFiles = mutableListOf<File>()
 
         originFile.parentFile.parentFile.walkTopDown().forEach {
+
+            yield()
 
             if (it.name == originFile.name) {
                 SkyscaperApp.logger.log(message = "Found \"${originFile.name}\" in \"${it.parentFile.path}\"")

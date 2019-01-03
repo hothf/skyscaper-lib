@@ -53,7 +53,7 @@ object SkyscaperApp {
     /**
      * Performs the tooling.
      */
-    fun perform(args: Array<String>): Boolean {
+    suspend fun perform(args: Array<String>): Boolean {
         if (InputChecker.checkInput(args)) {
             return Filemanipulator.perform(args)
         }
