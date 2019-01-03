@@ -19,17 +19,20 @@ object SkyscaperApp {
     /**
      * Performs asynchronously the tooling. The callback informs about the success or failure.
      */
-    fun performAsync(args: Array<String>, callback: (Boolean) -> Unit) = GlobalScope.launch {
+    fun performAsync(args: Array<String>, callback: (Boolean) -> Unit) {
 
-        val job = withTimeoutOrNull(TIMEOUT_MS) {
-            callback(perform(args))
-        }
+        GlobalScope.launch {
 
-        if (job == null) {
-            SkyscaperApp.logger.log(
-                    severity = Severity.ERROR,
-                    message = "Experienced a $TIMEOUT_MS ms Timeout!")
-            callback(false)
+            val job = withTimeoutOrNull(TIMEOUT_MS) {
+                callback(perform(args))
+            }
+
+            if (job == null) {
+                SkyscaperApp.logger.log(
+                        severity = Severity.ERROR,
+                        message = "Experienced a $TIMEOUT_MS ms Timeout!")
+                callback(false)
+            }
         }
     }
 
