@@ -14,6 +14,6 @@ import app.SkyscaperApp
  */
 fun main(args: Array<String>) {
 
-    SkyscaperApp.perform(args)
+    SkyscaperApp.performAsync(args){}
 
 }

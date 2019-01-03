@@ -1,12 +1,15 @@
 import app.SkyscaperApp
 import file.Filemanipulator
 import input.InputChecker
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 
 
 class Test {
-
 
     @Test
     fun `test the input checking`() {
@@ -19,28 +22,45 @@ class Test {
 
         input = arrayOf("", "", "")
         Assert.assertFalse(InputChecker.checkInput(input))
-
     }
 
     @Test
     fun `test the file manipulation functionality`() {
 
-        var files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
-        Assert.assertTrue(Filemanipulator.perform(files))
+        val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
 
-        //files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "ddd")
-        //Assert.assertTrue(Filemanipulator.perform(files))
+        Assert.assertTrue(Filemanipulator.perform(files))
     }
 
     @Test
-    fun `test the app functionality`() {
+    fun `test the app functionality async`() = runBlocking {
 
-        var files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
-        Assert.assertTrue(SkyscaperApp.perform(files))
+        val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
 
-        //files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "ddd")
-        //Assert.assertTrue(Filemanipulator.perform(files))
+        var hasCompleted = false
+
+        launch {
+
+            SkyscaperApp.performAsync(files) {
+                hasCompleted = true
+                Assert.assertTrue(it)
+                println("Async Test completed")
+            }
+
+            while (!hasCompleted) {
+                delay(100)
+            }
+        }
+
+        println("Async Test executed")
     }
 
+    @Test
+    fun `test the app functionality`() = runBlocking {
+
+        val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
+
+        Assert.assertTrue(SkyscaperApp.perform(files))
+    }
 
 }
