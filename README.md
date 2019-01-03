@@ -6,11 +6,13 @@ Written purely with Kotlin and the kotlinx.coroutines library.
 
 ## Build
 
-Build with IntelliJ IDE or via command line with:
+Build with IntelliJ IDE ("Build artifact") or via command line with:
 
 `$ cd src/`
 
 `$ kotlinc . -cp ../lib/kotlinx-coroutines-core-1.0.1.jar -include-runtime -d skyscaper.jar`
+
+Note that the IDE approach generates a full jar for standalone usage.
 
 ## Usage
 

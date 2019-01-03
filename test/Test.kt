@@ -1,12 +1,15 @@
+import app.CompletionListener
 import app.SkyscaperApp
 import file.Filemanipulator
 import input.InputChecker
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import javax.security.auth.callback.Callback
 
 
 class Test {
@@ -41,11 +44,15 @@ class Test {
 
         launch {
 
-            SkyscaperApp.performAsync(files) {
-                hasCompleted = true
-                Assert.assertTrue(it)
-                println("Async Test completed")
-            }
+            SkyscaperApp.performAsync(
+                    files,
+                    object : CompletionListener {
+                        override fun onCompleted(successful: Boolean) {
+                            hasCompleted = true
+                            Assert.assertTrue(successful)
+                            println("Async Test completed")
+                        }
+                    })
 
             while (!hasCompleted) {
                 delay(100)

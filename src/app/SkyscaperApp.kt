@@ -8,30 +8,44 @@ import logger.Severity
 import logger.SkyscaperLogger
 
 /**
+ * Listens for the finishing of the skyscaper task.
+ */
+interface CompletionListener {
+
+    /**
+     * Called on completion of the skyscaper task.
+     *
+     * @param successful true if successful, false otherwise
+     */
+    fun onCompleted(successful: Boolean)
+}
+
+/**
  * The skyscaper tool entry point.
  */
 object SkyscaperApp {
 
-    private const val TIMEOUT_MS = 2_000L
+    private const val TIMEOUT_MS = 5_000L
 
     var logger: Logger = SkyscaperLogger
 
     /**
-     * Performs asynchronously the tooling. The callback informs about the success or failure.
+     * Performs asynchronously the tooling. The optional callback informs about the success or failure.
      */
-    fun performAsync(args: Array<String>, callback: (Boolean) -> Unit) {
+    fun performAsync(args: Array<String>, onComplete: CompletionListener? = null) {
 
         GlobalScope.launch {
 
             val job = withTimeoutOrNull(TIMEOUT_MS) {
-                callback(perform(args))
+                onComplete?.onCompleted(perform(args))
             }
 
             if (job == null) {
                 SkyscaperApp.logger.log(
                         severity = Severity.ERROR,
                         message = "Experienced a $TIMEOUT_MS ms Timeout!")
-                callback(false)
+
+                onComplete?.onCompleted(false)
             }
         }
     }
