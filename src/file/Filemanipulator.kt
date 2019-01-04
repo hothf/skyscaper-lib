@@ -38,9 +38,9 @@ object Filemanipulator {
 
                 val destinationFile = File(dir.path + File.separator + it.name)
 
-                originFile.copyTo(destinationFile, true)
+                it.copyTo(destinationFile, true)
 
-                SkyscaperApp.logger.log(message = "Copied \"${destinationFile.name}\" to \"${dir.path}\".")
+                SkyscaperApp.logger.log(message = "Copied \"${it.name}\" to \"${dir.path}\".")
 
                 copiedFiles.add(it)
             }
