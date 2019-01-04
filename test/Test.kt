@@ -30,9 +30,14 @@ class Test {
     @Test
     fun `test the file manipulation functionality`() = runBlocking {
 
-        val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
-
+        var files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
         Assert.assertTrue(Filemanipulator.perform(files))
+
+        files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/tester/drawable-hdpi/tester_png.png")
+        Assert.assertFalse(Filemanipulator.perform(files))
+
+        files = arrayOf("/Users/th/Desktop/bla", "/Users/th/Desktop/tester/drawable-hdpi/tester_png.png")
+        Assert.assertFalse(Filemanipulator.perform(files))
     }
 
     @Test

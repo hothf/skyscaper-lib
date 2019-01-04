@@ -14,7 +14,12 @@ object Filemanipulator {
         val originFile = File(args[0])
 
         if (originFile.isDirectory) {
-            SkyscaperApp.logger.log(Severity.ERROR, "${args[0]} is a directory.")
+            SkyscaperApp.logger.log(Severity.ERROR, "Source \"${args[0]}\" is a directory.")
+            return false
+        }
+
+        if (!File(args[1]).isDirectory) {
+            SkyscaperApp.logger.log(Severity.ERROR, "Destination \"${args[1]}\" is not a directory.")
             return false
         }
 
