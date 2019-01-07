@@ -7,7 +7,15 @@ import java.io.File
 
 object Filemanipulator {
 
-    suspend fun perform(args: Array<String>): Boolean {
+    /**
+     * Performs the task of copying the first input path file (args[0]) to the the given path directory (args[1]) in
+     * the second argument. Also will copy all file occurrences in up to two parent folders of the file and copy it with
+     * the corresponding parent folder.
+     *
+     * The name of the file can be changed optionally with the fileName parameter. Leave null for no name changing.
+     *
+     */
+    suspend fun perform(args: Array<String>, fileName: String? = null): Boolean {
 
         SkyscaperApp.logger.log(message = "Checking files ...")
 
@@ -36,11 +44,11 @@ object Filemanipulator {
 
                 val dir = File(destinationDir.path + File.separator + it.parentFile.name).apply { mkdir() }
 
-                val destinationFile = File(dir.path + File.separator + it.name)
+                val destinationFile = File(dir.path + File.separator + (fileName ?: it.name))
 
                 it.copyTo(destinationFile, true)
 
-                SkyscaperApp.logger.log(message = "Copied \"${it.name}\" to \"${dir.path}\".")
+                SkyscaperApp.logger.log(message = "Copied \"${destinationFile.name}\" to \"${dir.path}\".")
 
                 copiedFiles.add(it)
             }

@@ -32,12 +32,14 @@ object SkyscaperApp {
     /**
      * Performs asynchronously the tooling. The optional callback informs about the success or failure.
      */
-    fun performAsync(args: Array<String>, onComplete: CompletionListener? = null) {
+    fun performAsync(args: Array<String>,
+                     fileName: String? = null,
+                     onComplete: CompletionListener? = null) {
 
         GlobalScope.launch {
 
             val job = withTimeoutOrNull(TIMEOUT_MS) {
-                onComplete?.onCompleted(perform(args))
+                onComplete?.onCompleted(perform(args, fileName))
             }
 
             if (job == null) {
@@ -53,9 +55,9 @@ object SkyscaperApp {
     /**
      * Performs the tooling.
      */
-    suspend fun perform(args: Array<String>): Boolean {
+    suspend fun perform(args: Array<String>, fileName: String? = null): Boolean {
         if (InputChecker.checkInput(args)) {
-            return Filemanipulator.perform(args)
+            return Filemanipulator.perform(args, fileName)
         }
         return false
     }

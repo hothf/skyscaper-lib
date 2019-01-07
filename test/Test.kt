@@ -51,6 +51,7 @@ class Test {
 
             SkyscaperApp.performAsync(
                     files,
+                    "testOutput.png",
                     object : CompletionListener {
                         override fun onCompleted(successful: Boolean) {
                             hasCompleted = true
