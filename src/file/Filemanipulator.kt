@@ -17,7 +17,9 @@ object Filemanipulator {
      */
     suspend fun perform(args: Array<String>, fileName: String? = null): Boolean {
 
-        SkyscaperApp.logger.log(message = "Checking files ...")
+        assert(args.size >= 2)
+
+        SkyscaperApp.logger.log(message = "Searching for files ...")
 
         val originFile = File(args[0])
 
@@ -33,7 +35,7 @@ object Filemanipulator {
 
         val destinationDir = File(args[1]).apply { mkdir() }
 
-        val copiedFiles = mutableListOf<File>()
+        val foundFiles = mutableListOf<File>()
 
         originFile.parentFile.parentFile.walkTopDown().forEach {
 
@@ -42,21 +44,33 @@ object Filemanipulator {
             if (it.name == originFile.name) {
                 SkyscaperApp.logger.log(message = "Found \"${originFile.name}\" in \"${it.parentFile.path}\"")
 
-                val dir = File(destinationDir.path + File.separator + it.parentFile.name).apply { mkdir() }
-
-                val destinationFile = File(dir.path + File.separator + (fileName ?: it.name))
-
-                it.copyTo(destinationFile, true)
-
-                SkyscaperApp.logger.log(message = "Copied \"${destinationFile.name}\" to \"${dir.path}\".")
-
-                copiedFiles.add(it)
+                foundFiles.add(it)
             }
         }
 
-        copiedFiles.forEach { it.delete() }
+        SkyscaperApp.logger.log(message = "Found ${foundFiles.size} file(s) in total.")
 
-        SkyscaperApp.logger.log(message = "Clean up: source files deleted.")
+        foundFiles.forEach {
+
+            val dir = File(destinationDir.path + File.separator + it.parentFile.name).apply { mkdir() }
+
+            val destinationFile = File(dir.path + File.separator + (fileName ?: it.name))
+
+            if (it.path != destinationFile.path) {
+
+                it.copyTo(destinationFile, true)
+
+                SkyscaperApp.logger.log(message = "Transferred \"${it.path}\" to \"${destinationFile.path}\". Deleted source file.")
+
+                it.delete()
+            } else {
+                SkyscaperApp.logger.log(
+                        severity = Severity.WARNING,
+                        message = "Skipping \"${it.path}\", it\'s within the destination path.")
+            }
+        }
+
+        //SkyscaperApp.logger.log(message = "Clean up: source files deleted.")
 
         return true
     }

@@ -30,7 +30,7 @@ class Test {
     @Test
     fun `test the file manipulation functionality`() = runBlocking {
 
-        var files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
+        var files = arrayOf("/Users/th/Desktop/drawable-mdpi/hello.png", "/Users/th/Desktop/bla")
         Assert.assertTrue(Filemanipulator.perform(files))
 
         files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/tester/drawable-hdpi/tester_png.png")
@@ -43,7 +43,7 @@ class Test {
     @Test
     fun `test the app functionality async`() = runBlocking {
 
-        val files = arrayOf("/Users/th/Desktop/tester/drawable-hdpi/tester_png.png", "/Users/th/Desktop/bla")
+        val files = arrayOf("/Users/th/Desktop/drawable-mdpi/hello.png", "/Users/th/Desktop/bla")
 
         var hasCompleted = false
 
@@ -51,7 +51,7 @@ class Test {
 
             SkyscaperApp.performAsync(
                     files,
-                    "testOutput.png",
+                    "output.png",
                     object : CompletionListener {
                         override fun onCompleted(successful: Boolean) {
                             hasCompleted = true
